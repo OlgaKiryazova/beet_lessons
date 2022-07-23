@@ -26,7 +26,7 @@ class CarEngine:
     MIN_CYLINDERS = 4
     MAX_CYLINDERS = 8
     MIN_CAPACITY = 1400
-    MAX CAPACITY = 5200
+    MAX_CAPACITY = 5200
 
     def __init__(self, fuel_type, capacity, cylinders, idle_rpms=700, max_rpms=8000):
         self.fuel_type = fuel_type
@@ -53,9 +53,6 @@ class CarEngine:
 
 class GasEngine(CarEngine):
     ...
-
-class
-
 
 
 
