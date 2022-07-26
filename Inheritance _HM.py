@@ -5,7 +5,7 @@ class Person:
         self.status = status
 
     def __str__(self):
-        return self.name + ' ' + self.status
+        return f'{self.name}  {self.status}'
 
 
 class Student(Person):
@@ -17,7 +17,7 @@ class Student(Person):
     def studied_topic(self, topic):
         self.knowledge.append(topic)
 
-    def get_rated(self, topic, score):
+    def set_rated(self, topic, score):
         self.rating.update({topic: score})
 
     def learned_topics(self):
@@ -36,8 +36,9 @@ class Teacher(Person):
         self.count_lesson += 1
         print(f'lesson {topic} completed')
 
-    def rate(self, student, topic, score):
-        student.get_rated(topic, score)
+    @staticmethod
+    def rate(student, topic, score):
+        student.set_rated(topic, score)
         print(f'{student.name} has been rated of {score} points')
 
     def lessons(self):
@@ -52,14 +53,17 @@ class Teacher(Person):
 
 class Mathematician:
 
-    def square_nums(self, list):
-        print([num ** 2 for num in list])
+    @staticmethod
+    def square_nums(list_):
+        print([num ** 2 for num in list_])
 
-    def remove_positives(self, list):
-        print([num for num in list if num < 0])
+    @staticmethod
+    def remove_positives(list_):
+        print([num for num in list_ if num < 0])
 
-    def filter_leaps(self, list):
-        print([year for year in list if year % 4 == 0])
+    @staticmethod
+    def filter_leaps(list_):
+        print([year for year in list_ if year % 4 == 0])
 
 
 ########################################################################################
@@ -79,34 +83,55 @@ class Product:
 
 
 class ProductStore:
-    def __init__(self, product: Product):
-        self.product = product
+    def __init__(self):
+        self.products = []
+        self.income = 0
 
-    def add(self, amount):
-        self.amount += amount
-        self.price = self.price * 1.3
-        print(f'{self.name} {amount}  added')
+    def add(self, product, amount):
+        self.products.append(product)
+        product.price = round(product.price * 1.3, 2)
+        product.amount += amount
+        print(f'{product.name} {amount} units added')
 
-    # def set_discount(self, percent, identifier_type = 'name'):
-    #     self.price = self.price * (100-percent)
-    #     print(self.product.name, self.price)
+    def set_discount(self, identifier, percent, identifier_type = 'name'):
+        if identifier_type == 'name':
+            for i in self.products:
+                if i.name == identifier:
+                    i.price *= (1 - percent/100)
+        elif identifier_type == 'type':
+            for i in self.products:
+                if i.type_product == identifier:
+                    i.price *= (1 - percent/100)
 
+    def sell_product(self, product_name, amount):
+        for i in self.products:
+            if i.name == product_name and i.amount >= amount:
+                i.amount -= amount
+                self.income += i.price * amount
+                print(f'{i.name} sell {amount} units')
 
-    # def sell_product(self, product_name, amount):
-    #     if product_name in Product.data:
-    #
-    #         self.amount = self.amount-amount
-    #     print(self)
+    def get_income(self):
+        return self.income
 
+    def get_all_products(self):
+        for prod in self.products:
+            print(prod.name, prod.type, prod.price, prod.amount)
 
+    def get_product_info(self, product_name):
+        info = [prod.__dict__ for prod in self.products if prod.name == product_name]
+        if not info:
+            raise ValueError('Such product does not exist')
+        else:
+            print(info)
 
+################################################################################
+# Task 4
 
-
-
-
-
-
-
+class CustomException(Exception):
+    def __init__(self, msg):
+        super().__init__(msg)
+        with open('logs.txt', 'a') as f:
+            f.write(msg + '\n')
 
 
 def main():
@@ -141,12 +166,17 @@ def main():
 
     p = Product('Sport', 'Football T-Shirt', 100)
     p2 = Product('Food', 'Ramen', 1.5)
-    s = ProductStore
+    s = ProductStore()
     s.add(p, 10)
     s.add(p, 10)
     s.add(p2, 300)
-    # s.sell_product('Ramen', 10)
+    s.sell_product('Ramen', 10)
     print(p)
+    print(p2)
+    s.get_product_info('Ramen')
+    # s.get_product_info('fdh')
+    print(s.income)
+
 
 
 
