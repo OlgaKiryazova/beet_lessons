@@ -2,23 +2,25 @@
 
 class Animal:
     def __init__(self, name):
-         self.name = name
+        self.name = name
 
     def talk(self):
         raise NotImplementedError('must be implemented by a sub class')
+
 
 class Cat(Animal):
     def talk(self):
         print(f'{self.name} Meow')
 
+
 class Dog(Animal):
     def talk(self):
         print(f'{self.name} Woof-woof')
 
-class AnimalTalks:
-    def animal_talk(self, animals):
-        for animal in animals:
-            animal.talk()
+
+def animal_talk(animals):
+    for animal in animals:
+        animal.talk()
 
 
 #########################################################
@@ -26,109 +28,74 @@ class AnimalTalks:
 
 class Author:
 
-    def __init__(self, name_author, country, birthday, books = []):
-        self.name_author = name_author
+    def __init__(self, name, country, birthday, books = []):
+        self.name = name
         self.country = country
         self.birthday = birthday
         self.books = books
 
-
-    # def add_new_author(self, name_author: str,books = [], country = None, birthday= None):
-    #     author = {'name_author': name_author,
-    #               'country': country,
-    #               'birthday': birthday,
-    #               'books': books
-    #               }
-    #     self.authors.append(author)
-
     def __repr__(self):
-        return f' Author {self.name_author} {self.country} {self.birthday}'
+        return f' Author {self.name} {self.country} {self.birthday}'
 
     def __str__(self):
-        return f'Author {self.name_author} {self.country} {self.birthday}'
+        return f'Author {self.name} {self.country} {self.birthday}'
 
 
 class Book:
-    def __init__(self, name, year, author):
+    def __init__(self, name, year, author: Author):
         self.name = name
         self.year = year
         self.author = author
 
-    # def add_book(self, name, year, author):
-    #     self.books.append(name, year, author)
-    #
-    # def __repr__(self):
-    #     return f'book {self.name} {self.year}'
-    #
-    # def __str__(self):
-    #     return f'book{self.name} {self.year}'
-
     def __str__(self):
-        return '"{}" by {}'.format(self.name, self.author)
+        return f'{self.name} by {self.author}'
 
     def __repr__(self):
-        return str(self)
-
+        return f'{self.name} by {self.author}'
 
 
 class Library:
-    # def __init__(self, name, books = [], authors = []):
-    #     self.name = name
-    #     self.books = books
-    #     self.authors = authors
 
     def __init__(self):
         self.books = []
         self.authors = []
 
-    def new_book(self, name: str, year: int, author):
-        # add_book(name, year, author)
-        book = {'name': name, 'year': year, 'author': author}
+    def new_book(self, name: str, year: int, author: Author):
+        book = Book(name, year, author)
         self.books.append(book)
         if author not in self.authors:
             self.authors.append(author)
-            # name_author = author
-            # books = self.books
-            # country = None
-            # birthday = None
-            # author.add_new_author(name_author,  books,  country = None, birthday = None,)
-        print(f'{name} added')
+        print(f'Book "{name}" added')
 
     def group_by_author(self, author):
         for book in self.books:
-            if book.get('author') == author:
+            if book.author == author:
                 print(book)
-        else:
-            print('author not found')
 
     def group_by_year(self, year: int):
         for book in self.books:
-            if book.get('year') == year:
+            if book.year == year:
                 print(book)
-            else:
-                print('year not found')
-
 
     def __repr__(self):
-        return f'{self.__class__.__name__} library'
+        return f'{self.__class__.__name__}'
 
     def __str__(self):
-        return f'{self.__class__.__name__} library'
+        return f'{self.__class__.__name__}'
 
 
 
 #########################################################################
 # Task 3
-class Fraction:
-    pass
+
+
+
+
 
 def main():
     animals = [Cat('Lulu'), Dog('Rex'), Cat('Sonya')]
-    talks = AnimalTalks()
-    talks.animal_talk(animals)
-    book1 = Book('1984', 1949,'George Orwel')
-    book2 = Book('Animal Farm', 1945, 'George Orwel')
-    book3 = Book('Fahrenheit 451', 1953, 'Raymond Bradbury')
+    animal_talk(animals)
+
     l = Library()
     l.new_book('1984', 1949, 'George Orwel')
     l.new_book('Animal Farm', 1945, 'George Orwel')
@@ -136,7 +103,6 @@ def main():
     print(l.books)
     l.group_by_author('George Orwel')
     l.group_by_year(1945)
-
 
 
 
