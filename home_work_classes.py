@@ -26,12 +26,12 @@ class TVController:
         self.channel_number = 0
 
     def first_channel(self):
-        print(self.channel[0])
+        return self.channel[0]
 
     def last_channel(self):
-        print(self.channel[-1])
+        return self.channel[-1]
 
-    def controller_channels(self, number):
+    def _controller_channels(self, number):
         self.channel_number = self.channel_number + number
         return self.channel[self.channel_number]
 
@@ -41,20 +41,20 @@ class TVController:
 
     def next_channel(self):
         try:
-            return self.controller_channels(+1)
+            return self._controller_channels(+1)
         except:
             self.channel_number = 0
-            return self.controller_channels(self.channel_number)
+            return self._controller_channels(self.channel_number)
 
     def previous_channel(self):
         try:
-            return self.controller_channels(-1)
+            return self._controller_channels(-1)
         except:
             self.channel_number = -1
-            return self.controller_channels(self.channel_number)
+            return self._controller_channels(self.channel_number)
 
     def current_channel(self):
-       return self.channel[self.channel_number]
+        return self.channel[self.channel_number]
 
     def is_exist(self, arg):
         if isinstance(arg, int):
@@ -71,11 +71,12 @@ class TVController:
 
 class Military:
 
-    def __init__(self, last_name, forces, function, experience):
+    def __init__(self, last_name, forces, experience):
         self.last_name = last_name
         self.forces = forces
-        self.function = function
         self.experience = experience
+
+        self.weapon = None
 
     @staticmethod
     def salute():
@@ -85,15 +86,20 @@ class Military:
         self.weapon = weapon
         print(f'{weapon} received')
 
-    def print_forces(self):
-        print(self.forces)
+    def attack(self):
+        pass
 
 
 class Soldier(Military):
     RANK = 'Soldier'
+    soldiers = []
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.soldiers.append(self.last_name)
+
+    def attack(self):
+        print(f'Took {self.weapon} and and went on the attack')
 
 
 
@@ -102,6 +108,9 @@ class Major(Military):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def attack(self):
+        print(f' {Soldier.soldiers} soldiers were ordered to attack')
 
 
 def main():
@@ -139,11 +148,15 @@ def main():
     controller.is_exist(4)
     controller.is_exist('TV1000')
 
-    soldier_1 = Soldier('Petrov', 'naval forces', 'naval forces', 10)
+    soldier_1 = Soldier('Petrov', 'naval forces', '2 years')
+    soldier_2 = Soldier('Petrenco', 'naval forces', '3 years')
     soldier_1.salute()
+    print(Soldier.soldiers)
     soldier_1.get_weapons('MLRS')
     print(soldier_1.weapon)
-    soldier_1.print_forces()
+    major = Major('Ivanov', 'naval forces', '10 years')
+    major.attack()
+
 
 
 if __name__ == '__main__':
