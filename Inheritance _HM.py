@@ -95,37 +95,38 @@ class ProductStore:
 
     def set_discount(self, identifier, percent, identifier_type = 'name'):
         if identifier_type == 'name':
-            for i in self.products:
-                if i.name == identifier:
-                    i.price *= (1 - percent/100)
+            for product in self.products:
+                if product.name == identifier:
+                    product.price *= (1 - percent/100)
         elif identifier_type == 'type':
-            for i in self.products:
-                if i.type_product == identifier:
-                    i.price *= (1 - percent/100)
+            for product in self.products:
+                if product.type_product == identifier:
+                    product.price *= (1 - percent/100)
 
     def sell_product(self, product_name, amount):
-        for i in self.products:
-            if i.name == product_name and i.amount >= amount:
-                i.amount -= amount
-                self.income += i.price * amount
-                print(f'{i.name} sell {amount} units')
+        for product in self.products:
+            if product.name == product_name and product.amount >= amount:
+                product.amount -= amount
+                self.income += product.price * amount
+                print(f'{product.name} sell {amount} units')
 
     def get_income(self):
         return self.income
 
     def get_all_products(self):
-        for prod in self.products:
-            print(prod.name, prod.type, prod.price, prod.amount)
+        for product in self.products:
+            print(f'{product.name}, price: {product.price}, amount :{product.amount}')
 
     def get_product_info(self, product_name):
-        info = [prod.__dict__ for prod in self.products if prod.name == product_name]
-        if not info:
-            raise ValueError('Such product does not exist')
+        for product in self.products:
+            if product.name == product_name:
+                print(product.__dict__)
         else:
-            print(info)
+            print(f'{product_name} is not in the list')
 
 ################################################################################
 # Task 4
+
 
 class CustomException(Exception):
     def __init__(self, msg):
@@ -174,8 +175,11 @@ def main():
     print(p)
     print(p2)
     s.get_product_info('Ramen')
-    # s.get_product_info('fdh')
+    s.get_product_info('fdh')
     print(s.income)
+    s.get_all_products()
+
+
 
 
 
