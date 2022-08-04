@@ -1,5 +1,6 @@
 # Task 1
 import re
+from functools import wraps
 
 
 class Email:
@@ -28,6 +29,9 @@ class Boss:
         self.company = company
         self.workers = []
 
+    def __str__(self):
+        return f"{self.__class__.__name__} name: {self.name}, Workers:{self.workers}"
+
     @property
     def get_workers(self):
         return self.workers
@@ -43,18 +47,54 @@ class Worker:
         self.name = name
         self.company = company
         self.boss = boss
-        # boss.get_workers(name)
 
-    @property
-    def get_boss(self):
-        return self.boss
+    def __str__(self):
+        return f"{self.name}"
 
-    @get_boss.setter
-    def get_boss(self, value):
-        self.boss = value
+
+######################################################################################
+# Task 2
+class TypeDecorators:
+
+    @staticmethod
+    def to_int(func):
+        @wraps(func)
+        def wrapper(*args):
+            return int(func(*args))
+        return wrapper
+
+    @staticmethod
+    def to_bool(func):
+        @wraps(func)
+        def wrapper(*args):
+            return bool(func(*args))
+        return wrapper
+
+    @staticmethod
+    def to_float(func):
+        @wraps(func)
+        def wrapper(*args):
+            return float(func(*args))
+        return wrapper
+
+
+@TypeDecorators.to_int
+def do_nothing(string: str):
+    return string
+
+
+@TypeDecorators.to_bool
+def do_something(string: str):
+    return string
+
+
+@TypeDecorators.to_float
+def do_anything(string: str):
+    return string
 
 
 def main():
+
     print('valid:')
     Email('abc-d@mail.com')
     Email('abc.def@mail.com')
@@ -76,15 +116,17 @@ def main():
     Email('abc.def@mail..com')
 
     boss = Boss(53, "Bob", "Puma")
-    worker1 = Worker(3453, "Ivan", "Puma", boss)
-    worker2 = Worker(737, "Max", "Puma", boss)
-    print(boss.workers)
-    print(boss.get_workers)
-    print(boss.workers)
-    # print(boss.get_workers(worker1))
-    # print(boss.workers)
-    # print(boss.get_workers(worker2))
-    # print(boss.workers)
+    print(boss)
+    boss.workers = Worker(3453, "Ivan", "Puma", boss)
+    print(boss)
+    boss.workers = Worker(737, "Max", "Puma", boss)
+    print(boss)
+
+
+
+    print(do_nothing('25') == 25)
+    print(do_something('True') is True)
+
 
 
 
