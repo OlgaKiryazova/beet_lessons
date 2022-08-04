@@ -1,3 +1,5 @@
+from math import gcd
+
 # Task 1
 
 class Animal:
@@ -84,15 +86,47 @@ class Library:
         return f'{self.__class__.__name__}'
 
 
-
 #########################################################################
 # Task 3
 
 
+class Fraction:
 
+    def __init__(self, num, den):
+        self.num = num
+        self.den = den
+
+    def __str__(self):
+        return f'({self.num}/{self.den})'
+
+    def __add__(self, other):
+        new_num = other.den * self.num + other.num * self.den
+        new_den = self.den * other.den
+        common = gcd(new_num, new_den)
+        return Fraction(new_num // common, new_den // common)
+
+    def __sub__(self, other):
+        total_den = self.den * other.den
+        new_num = other.den * self.num - other.num * self.den
+        new_den = total_den
+        common = gcd(new_num, new_den)
+        return Fraction(new_num // common, new_den // common)
+
+    def __mul__(self, other):
+        new_num = self.num * other.num
+        new_den = self.den * other.den
+        common = gcd(new_num, new_den)
+        return Fraction(new_num // common, new_den // common)
+
+    def __truediv__(self, other):
+        new_num = self.num * other.den
+        new_den = self.den * other.num
+        common = gcd(new_num, new_den)
+        return Fraction(new_num // common, new_den // common)
 
 
 def main():
+
     animals = [Cat('Lulu'), Dog('Rex'), Cat('Sonya')]
     animal_talk(animals)
 
@@ -104,7 +138,11 @@ def main():
     l.group_by_author('George Orwel')
     l.group_by_year(1945)
 
-
+    x = Fraction(1, 2)
+    y = Fraction(1, 4)
+    print(x + y)
+    print(x - y)
+    print(x * y)
 
 
 
