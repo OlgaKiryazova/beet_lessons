@@ -2,7 +2,11 @@ import unittest
 
 from descriptors_HM import Email
 import home_work_classes
-import to_test
+from to_test import ColorSpecification, SizeSpecification, ProductFilter, \
+    Product, Color, Size, AndSpecification
+
+from unittest.mock import patch
+
 
 class TestEmail(unittest.TestCase):
 
@@ -12,21 +16,23 @@ class TestEmail(unittest.TestCase):
 
     def test_valid_email(self):
         result = Email.validate(self.valid_email)
-        self.assertEqual(result, print(f"{self.valid_email} is valid"))
+        self.assertEqual(result, f"{self.valid_email} is valid")
 
     def test_invalid_email(self):
         result = Email.validate(self.invalid_email)
-        self.assertEqual(result, print(f"{self.invalid_email} is invalid"))
+        self.assertEqual(result, f"{self.invalid_email} is invalid")
 
-    # проверочный результат не полный, но тест прошел успешно, почему?
-    # def test_invalid_email(self):
-    #     result = Email.validate(self.invalid_email)
-    #     self.assertEqual(result, print(f"{self.invalid_email} "))
+    @patch('builtins.print')
+    def test_valid_email(self, mock_print):
+        mock_print.return_value = 'abc-d@mail.com is valid'
+        result = Email.validate(self.valid_email)
+        self.assertEqual(result, f"{self.valid_email} is valid")
 
     def test_TypeError(self):
         with self.assertRaises(TypeError):
             Email.validate(1111111)
 
+################################################################
 
 
 class TestTVController(unittest.TestCase):
@@ -61,38 +67,35 @@ class TestTVController(unittest.TestCase):
         result = home_work_classes.TVController(self.channels).current_channel()
         self.assertEqual(result, "BBC")
 
-    def test_is_exist(self):
-        result = home_work_classes.TVController(self.channels).is_exist("BBC")
-        self.assertEqual(result, print('yes BBC'))
-
-
 #######################################################################
+
 
 class TestProductFilter(unittest.TestCase):
 
-
     def setUp(self) -> None:
-        apple = to_test.Product('apple', to_test.Color.GREEN, to_test.Size.SMALL)
-        tree = to_test.Product('tree', to_test.Color.GREEN, to_test.Size.LARGE)
-        house = to_test.Product('house', to_test.Color.BLUE, to_test.Size.LARGE)
+        apple = Product('apple', Color.GREEN, Size.SMALL)
+        tree = Product('tree', Color.GREEN, Size.LARGE)
+        house = Product('house', Color.BLUE, Size.LARGE)
 
         self.products = [apple, tree, house]
-        self.product_filter = to_test.ProductFilter()
+        self.product_filter = ProductFilter()
 
     def test_filter_color(self):
-        green = to_test.ColorSpecification(to_test.Color.GREEN)
+        green = ColorSpecification(Color.GREEN)
         for product in self.product_filter.filter(self.products, green):
-            result = f'{product.name} is GREEN'
-
-        self.assertEqual(result, "apple is GREEN" and "tree is GREEN")
+            self.assertEqual(product.color, Color.GREEN)
 
     def test_filter_large(self):
-        large = to_test.SizeSpecification(to_test.Size.LARGE)
+        large = SizeSpecification(Size.LARGE)
         for product in self.product_filter.filter(self.products, large):
-            result = f'{product.name} is LARGE'
+            self.assertEqual(product.size, Size.LARGE)
 
-        self.assertEqual(result, "apple??? is LARGE" and "house is LARGE")
-        # product.name указан не правильно, но тест прошел успешно?
+    def test_filter_size_and_color(self):
+        large_blue = AndSpecification(SizeSpecification(Size.LARGE), ColorSpecification(Color.BLUE))
+        for product in self.product_filter.filter(self.products, large_blue):
+            self.assertEqual(product.size, Size.LARGE)
+            self.assertEqual(product.color, Color.BLUE)
+
 
 
 

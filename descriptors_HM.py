@@ -13,9 +13,9 @@ class Email:
     def validate(cls, email):
         pattern = '^[^-.#][a-zA-Z\d_\.\?+-]+[^-.#]+@[a-zA-Z0-9-]+.{1}[a-z\-]+[^-.#]+$'
         if re.match(pattern, email):
-            print(f"{email} is valid")
+            return f"{email} is valid"
         else:
-            print(f"{email} is invalid")
+            return f"{email} is invalid"
 
 
 ######################################################################################
