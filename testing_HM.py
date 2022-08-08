@@ -5,8 +5,6 @@ import home_work_classes
 from to_test import ColorSpecification, SizeSpecification, ProductFilter, \
     Product, Color, Size, AndSpecification
 
-from unittest.mock import patch
-
 
 class TestEmail(unittest.TestCase):
 
@@ -21,12 +19,6 @@ class TestEmail(unittest.TestCase):
     def test_invalid_email(self):
         result = Email.validate(self.invalid_email)
         self.assertEqual(result, f"{self.invalid_email} is invalid")
-
-    @patch('builtins.print')
-    def test_valid_email(self, mock_print):
-        mock_print.return_value = 'abc-d@mail.com is valid'
-        result = Email.validate(self.valid_email)
-        self.assertEqual(result, f"{self.valid_email} is valid")
 
     def test_TypeError(self):
         with self.assertRaises(TypeError):
