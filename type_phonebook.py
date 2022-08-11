@@ -1,9 +1,11 @@
 import json
 from pprint import pprint
+from typing import Callable
 
 
-phonebook = 'Phonebook.json'
-contacts = []
+phonebook: str = 'Phonebook.json'
+contacts: list[dict] = []
+
 try:
     with open(phonebook, 'r', encoding='utf-8') as file_read:
         contacts = json.load(file_read)
@@ -11,7 +13,7 @@ except json.decoder.JSONDecodeError:
     print('Телефонная книга пустая, добавьте новый контакт')
 
 
-def rewrite_file(phonebook) -> None:
+def rewrite_file(phonebook: str) -> None:
     with open(phonebook, 'w', encoding='utf-8') as file:
         json.dump(contacts, file, ensure_ascii=False, indent=4)
 
@@ -42,8 +44,7 @@ def find_contact() -> None:
                      '5- поиск по городу\n'
                      'или "q" для выхода\n'
                      '->  ')
-    if parameter == 'q' \
-                   '':
+    if parameter == 'q':
         exit()
     parameter_dict: dict = {
         '1': 'first name',
@@ -114,14 +115,14 @@ def del_contact() -> None:
             del_contact()
 
 
-phonebook_dict: dict = {'1': add_contact,
+phonebook_dict: dict[str, Callable[..., None]] = {'1': add_contact,
                   '2': find_contact,
                   '3': edit_contact,
                   '4': del_contact,
                   '5': exit}
 
 while True:
-    function_choice: str = input('\nВыберите команду для работы с телефонной '
+    function_choice = input('\nВыберите команду для работы с телефонной '
                                  'книгой:\n'
                             '1 - добавить контакт\n'
                             '2 - найти контакт\n'
