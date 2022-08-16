@@ -33,7 +33,7 @@ class Stack:
             raise ValueError('Element is not on the stack')
 
 
-def reverse_(string: str | int) -> str | int:
+def reverse_(string: str | int) -> str:
     n = len(string)
     s = Stack()
     for i in range(0, n):
