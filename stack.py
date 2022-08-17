@@ -20,8 +20,17 @@ class Stack:
     def size(self) -> int:
         return len(self.items)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Stack: {self.items}'
+
+    def reverse_(self) -> str:
+        stack = []
+        for i in self.items:
+            stack.append(i)
+        string = ''
+        for i in range(0, self.size()):
+            string += str(stack.pop())
+        return string
 
     # task 3
     def get_from_stack(self, element):
@@ -31,17 +40,6 @@ class Stack:
                 return element
         else:
             raise ValueError('Element is not on the stack')
-
-
-def reverse_(string: str | int) -> str:
-    n = len(string)
-    s = Stack()
-    for i in range(0, n):
-        s.push(string[i])
-    string = ""
-    for i in range(0, n):
-        string += s.pop()
-    return string
 
 
 ##############################################################################
@@ -69,10 +67,35 @@ def balanced_brackets(string_: str) -> bool:
         return False
 
 
+class Queue:
+    def __init__(self) -> None:
+        self._items = []
+
+    def is_empty(self) -> bool:
+        return bool(self._items)
+
+    def enqueue(self, item) -> None:
+        self._items.insert(0, item)
+
+    def dequeue(self):
+        return self._items.pop()
+
+    def size(self) -> int:
+        return len(self._items)
+
+    def __repr__(self) -> str:
+        return f'Queue: {self._items}'
+
+    def get_from_queue(self, element):
+        for elem in self._items:
+            if elem == element:
+                self._items.remove(elem)
+                return element
+        else:
+            raise ValueError('Element is not on the queue')
+
 
 def main():
-    print(reverse_('apple'))
-    print(reverse_('123456'))
 
     print(balanced_brackets('(()))'))
     print(balanced_brackets('[{}]()'))
@@ -83,11 +106,21 @@ def main():
     stack.push(3)
     stack.push(4)
     print(stack)
-    stack.get_from_stack(2)
+    print(stack.reverse_())
+    print(stack.get_from_stack(2))
     print(stack)
-    # stack.get_from_stack(2)
+    # print(stack.get_from_stack(2))
 
-
+    queue = Queue()
+    queue.enqueue(1)
+    queue.enqueue(5)
+    queue.enqueue(3)
+    queue.enqueue(1)
+    queue.enqueue(2)
+    queue.enqueue(4)
+    print(queue)
+    print(queue.get_from_queue(3))
+    print(queue)
 
 
 if __name__ == '__main__':
