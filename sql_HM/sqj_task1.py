@@ -129,7 +129,6 @@ def main():
 
     print('#'*80)
     pprint(departament_workers)
-    connection.close()
 
     # Почему pprint в строчках 122 и 130 выдают одинаковые данные значений из таблиц,
     #  при этом в строке 127 я меняю данные?
