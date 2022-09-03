@@ -81,19 +81,21 @@ JOIN jobs AS J ON J.job_id =  E.job_id
 
 
 """
-result = select_query(connection, select)
-pprint(result)
+# result = select_query(connection, select)
+# pprint(result)
 
 
 # 7 write a query in SQL to display the job title and the average salary of employees
 select = """
 SELECT 
     job_title,
-    (max_salary + min_salary)/2
-FROM jobs 
+    AVG(salary)
+FROM employees 
+JOIN jobs on employees.job_id = jobs.job_id
+GROUP BY job_title order by AVG(salary) desc 
 """
-# result = select_query(connection, select)
-# pprint(result)
+result = select_query(connection, select)
+pprint(result)
 
 
 #8 write a query in SQL to display the full name (first and last name), and
@@ -109,8 +111,8 @@ JOIN locations AS L ON L.location_id  = D.location_id
 where L.City = 'London' 
 
 """
-result = select_query(connection, select)
-pprint(result)
+# result = select_query(connection, select)
+# pprint(result)
 
 
 #9 write a query in SQL to display the department name and the number of
