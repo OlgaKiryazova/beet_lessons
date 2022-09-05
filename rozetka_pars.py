@@ -55,7 +55,7 @@ def main():
     response = get_response(url)
 
     data = html_parser(response)
-    from pprint import  pprint
+
     json_file_writer(data)
     pprint(data)
 
