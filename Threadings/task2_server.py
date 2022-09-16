@@ -1,35 +1,43 @@
 import threading
 import socket
-
+import _thread
 
 SERVER = socket.gethostbyname(socket.gethostname())
+print(SERVER)
 PORT = 8001
 lock = threading.Lock()
-print(SERVER)
 
 
-def client_thread(connection):
+def client_thread(conn):
     print(threading.current_thread())
     while True:
-        data = connection.recv(1024)
+        data = conn.recv(1024)
         if not data:
             print('Bye')
             lock.release()
             break
-        connection.send(data)
-    connection.close()
+        conn.send(data)
+    conn.close()
 
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
+def server_(SERVER, PORT):
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((SERVER, PORT))
     print('Server binded to  port', PORT)
     server.listen(5)
-    print(f'Server is listening on {SERVER}')
+    print('Server is listening')
 
     while True:
         conn, addr = server.accept()
         lock.acquire()
         print(f'Connected to: {addr[0]}:{addr[1]}')
-        newthread = client_thread(conn)
-        newthread.start()
 
+        _thread.start_new_thread(client_thread, (conn, ))
+
+
+def main():
+    server_(SERVER, PORT)
+
+
+if __name__ == '__main__':
+    main()

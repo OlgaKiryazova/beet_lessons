@@ -4,7 +4,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 
-def get_json() -> dict:
+def get_json():
     page = 'https://api.pushshift.io/reddit/comment/search/'
     with ThreadPoolExecutor() as executor:
         future = executor.submit(requests.get, page)
@@ -12,7 +12,7 @@ def get_json() -> dict:
     return r.json()
 
 
-def extract_info(data: dict) -> dict:
+def extract_info(data):
     comments_dict = {'comments': []}
     data_key = data.get('data')
     for el in data_key:
@@ -28,8 +28,8 @@ def extract_info(data: dict) -> dict:
     return comments_dict
 
 
-def save_json(data: dict) -> None:
-    with open('comments.txt', 'w', encoding='utf-8') as f:
+def save_json(data):
+    with open('comments.json', 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4)
 
 
