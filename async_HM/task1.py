@@ -88,7 +88,7 @@ def main():
 
 
 #####################################################################
-# Pool of processes
+# Multiprocessing
 
 
 def main_mult():
@@ -106,16 +106,16 @@ if __name__ == '__main__':
     print('Asynchronous execution')
     start = time.perf_counter()
     asyncio.run(main_async())
-    print(time.perf_counter() - start)
+    print(time.perf_counter() - start) # result 0.03 sec
 
     print('\nSynchronous execution')
     start = time.perf_counter()
     main()
-    print(time.perf_counter() - start)
+    print(time.perf_counter() - start) # result 7.73 sec
 
-    print('\nPool of processes')
+    print('\nMultiprocessing')
     start = time.perf_counter()
     main_mult()
-    print(time.perf_counter() - start)
+    print(time.perf_counter() - start) # result 1.41 sec
 
 
